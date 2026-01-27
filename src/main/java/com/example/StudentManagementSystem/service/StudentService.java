@@ -4,6 +4,7 @@ import com.example.StudentManagementSystem.model.StudentModel;
 import com.example.StudentManagementSystem.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 
 @Service
 public class StudentService {
@@ -13,5 +14,24 @@ public class StudentService {
     }
     public StudentModel addStudent(StudentModel student){
         return repository.save(student);
+    }
+    public List<StudentModel> getStudents(){
+        return repository.findAll();
+    }
+    //update
+    public StudentModel updateStudent(String id, StudentModel student){
+        StudentModel existingStudent = repository.findById(id)
+                .orElseThrow(()-> new RuntimeException("No student found"));
+        existingStudent.setName(student.getName());
+        existingStudent.setAge(student.getAge());
+        existingStudent.setEmail(student.getEmail());
+        existingStudent.setUniversityRollNo(student.getUniversityRollNo());
+        return repository.save(existingStudent);
+    }
+    //delete
+    public void deleteStudent(String id){
+        StudentModel existingStudent = repository.findById(id)
+                .orElseThrow(()-> new RuntimeException("No student found"));
+        repository.delete(existingStudent);
     }
 }
